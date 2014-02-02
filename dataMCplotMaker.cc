@@ -171,7 +171,7 @@ void SetTDRStyle(){
   tdrStyle->cd();
 }
 
-void makePlot(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <char*> Titles, char* title, char* title2, std::string options_string, std::vector <Color_t> color_input){
+void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <char*> Titles, char* title, char* title2, std::string options_string, std::vector <Color_t> color_input){
 
   //Turn "options" string into vector of strings, one parm each
   std::vector <std::string> Options = GetParms(options_string);  
