@@ -62,6 +62,6 @@ Example:
   - std::vector <char*> myTitles;
   - myTitles.push_back("ttsl");
   - myTitles.push_back("ttdl");
-  - makePlot(CR1_data, myVector, myTitles, "#tilde{t} #rightarrow t#tilde{#chi}_{1}^{0} ISR", "CR-0b", "--vLine 120 --outputName test_plot");
+  - makePlot(CR1_data, myVector, myTitles, "#tilde{t} #rightarrow t#tilde{#chi} _ {1}^{0} ISR", "CR-0b", "--vLine 120 --outputName test _ plot");
 
 E-mail Alex with bug reports or feature requests, george AT physics DOT ucsb
