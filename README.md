@@ -6,9 +6,9 @@ Function to quickly make nice data/MC plots.  In addition to formatting, it auto
 To install (optional):
   1.  Put .so file somewhere like ~/macros
   2.  Add the following to your .rootlogon.C or .rootrc:
-      //loading Alex's awesome data/MC plot maker
-      gSystem->AddIncludePath("-I$HOME/dataMCplotMaker");
-      gSystem->Load("/home/users/cgeorge/dataMCplotMaker/dataMCplotMaker_cc.so");
+      - //loading Alex's awesome data/MC plot maker
+      - gSystem->AddIncludePath("-I$HOME/dataMCplotMaker");
+      - gSystem->Load("/home/users/cgeorge/dataMCplotMaker/dataMCplotMaker_cc.so");
   3.  Now you can "include" the .h file (#include "dataMCplotMaker.h") in your file, and call the function.
 
 To run without installing:
