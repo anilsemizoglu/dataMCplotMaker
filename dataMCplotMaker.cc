@@ -365,7 +365,9 @@ void makePlot(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <char*> T
     stack->Add(Backgrounds[i]);
   }
   if (setMinimum != -1) stack->SetMinimum(setMinimum);
-  if (setMinimum == -1 && !linear) stack->SetMinimum(stack->GetMinimum());
+  if (setMinimum == -1 && !linear && Backgrounds[0]->GetMinimum() > 0) stack->SetMinimum(min(1.0, 0.9*Backgrounds[0]->GetMinimum()));
+  else if (setMinimum == -1 && !linear && stack->GetMinimum() > 0) stack->SetMinimum(min(1.0, 0.1*stack->GetMinimum()));
+  else if (setMinimum == -1 && !linear) stack->SetMinimum(0.01);
   if (setMinimum == -1 && linear) stack->SetMinimum(0);
   gStyle->SetTitleFontSize(0.03);
   stack->Draw();
