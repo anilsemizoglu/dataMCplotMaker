@@ -41,6 +41,7 @@ Supported flags for "options" string:
   - --yAxisUnit X: change the y-axis unit from its default of ""
   - --yAxisOverride X: replace the entire y-axis label with the X
   - --xAxisLabel X: change the x-axis label from its default of "Entries"
+  - --noXaxisUnit: do not display a unit for the x-axis
   - --xAxisUnit X: change the x-axis unit from its default of ""
   - --xAxisOverride X: override the entire x-axis label to the user-defined value
   - --dataName X: replace the name for "data" in the legend with the user-defined value
