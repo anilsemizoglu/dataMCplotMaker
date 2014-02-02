@@ -17,8 +17,7 @@ To run without installing:
   3.  In root, compile the .cc file (.L path/dataMCplotMaker.cc+) before loading and compiling your file.
 
 To run the function:
-  
-  dataMCplotMaker(TH1F* data, std::vector <TH1F*> Backgrounds, std::vector <char> Titles*, char* title, char* Title2, std::string Options, std::vector <Color_t> colors)
+  - dataMCplotMaker(TH1F* data, std::vector <TH1F*> Backgrounds, std::vector <char> Titles*, char* title, char* Title2, std::string Options, std::vector <Color_t> colors)
 
 Mandatory arguments:
   - data: a histogram of the data
