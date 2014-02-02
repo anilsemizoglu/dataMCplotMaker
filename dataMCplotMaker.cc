@@ -51,11 +51,18 @@ float AdjustedMaximum(std::vector <TH1F*> Plots){
   return heights[heights.size()-1];
 }
 
-//Turn parsed argument from string into const char*
+//Turn parsed argument from string into const char*.  Remove leading and trailing whitespace
 const char* getString(std::string initial, std::string result){
   int temp = initial.find(result); 
   std::string substring = initial.substr(temp+result.length());
-  substring.erase(std::remove(substring.begin(), substring.end(), ' '), substring.end());
+  while (substring[0] == ' '){
+    std::string temp2 = substring.substr(1,substring.length()-1); 
+    substring = temp2;
+  }
+  while (substring[substring.length()-1] == ' '){
+    std::string temp2 = substring.substr(0,substring.length()-1); 
+    substring = temp2;
+  }
   return substring.c_str();
 }
 
@@ -179,6 +186,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   //Default values of all user-adjustable parameters
   bool linear = 0;
   bool doOverflow = 1;
+  bool showXaxisUnit = 1;
   char* energy = "8";
   char* lumi = "19.5";
   char* yAxisLabel = "Entries";
@@ -207,6 +215,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     else if (Options[i].find("preserveBackgroundOrder") < Options[i].length()) preserveBackgroundOrder = 1; 
     else if (Options[i].find("noDivisionLabel") < Options[i].length()) showDivisionLabel = 0; 
     else if (Options[i].find("noOverflow") < Options[i].length()) doOverflow = 0; 
+    else if (Options[i].find("noXaxisUnit") < Options[i].length()) showXaxisUnit = 0; 
     else if (Options[i].find("energy") < Options[i].length()){
       energy = new char[sizeof(getString(Options[i], "energy")) + 1];
       std::strcpy(energy, getString(Options[i], "energy"));
@@ -277,7 +286,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
       legendTextSize = atof( getString(Options[i], "legendTextSize") );
     }
     else if (Options[i].find("setMinimum") < Options[i].length()){
-      setMinimum = atof( getString(Options[i], "setMaximum") );
+      setMinimum = atof( getString(Options[i], "setMinimum") );
     }
     else cout << "Warning: Option not recognized!  Option: " << Options[i] << endl;
   }
@@ -367,21 +376,24 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   if (setMinimum != -1) stack->SetMinimum(setMinimum);
   if (setMinimum == -1 && !linear && Backgrounds[0]->GetMinimum() > 0) stack->SetMinimum(min(1.0, 0.9*Backgrounds[0]->GetMinimum()));
   else if (setMinimum == -1 && !linear && stack->GetMinimum() > 0) stack->SetMinimum(min(1.0, 0.1*stack->GetMinimum()));
-  else if (setMinimum == -1 && !linear) stack->SetMinimum(0.01);
+  else if (setMinimum == -1 && !linear) stack->SetMinimum(0.5);
   if (setMinimum == -1 && linear) stack->SetMinimum(0);
   gStyle->SetTitleFontSize(0.03);
   stack->Draw();
   float myMax = 0;
   if (setMaximum != -1) myMax = setMaximum;
-  if (setMaximum == -1 && !linear) myMax = pow(stack->GetMinimum(), -1.0/3.0) * pow(AdjustedMaximum(Backgrounds), 4.0/3.0);
-  if (setMaximum == -1 && linear)  myMax = (AdjustedMaximum(Backgrounds))*(4.0/3.0) - (stack->GetMinimum())*(1.0/3.0);
+  else if (setMaximum == -1 && !linear && stack->GetMinimum() > 0) myMax = pow(stack->GetMinimum(), -1.0/3.0) * pow(AdjustedMaximum(Backgrounds), 4.0/3.0);
+  else if (setMaximum == -1 && linear && stack->GetMinimum() > 0)  myMax = (AdjustedMaximum(Backgrounds))*(4.0/3.0) - (stack->GetMinimum())*(1.0/3.0);
+  else if (!linear) myMax = stack->GetMaximum()*20.0;
+  else myMax = stack->GetMaximum()*2;
   stack->SetMaximum(myMax);
   if (yAxisOverride != "") stack->GetYaxis()->SetTitle(Form("%s", yAxisOverride));
   if (yAxisOverride == "" && showDivisionLabel && yAxisUnit != "") stack->GetYaxis()->SetTitle(Form("%s [%s] / %.0f %s  ", yAxisLabel, yAxisUnit, Backgrounds[0]->GetXaxis()->GetBinWidth(1), xAxisUnit));
   if (yAxisOverride == "" && showDivisionLabel && yAxisUnit == "") stack->GetYaxis()->SetTitle(Form("%s / %.0f %s  ", yAxisLabel, Backgrounds[0]->GetXaxis()->GetBinWidth(1), xAxisUnit));
   if (yAxisOverride == "" && !showDivisionLabel && yAxisUnit != "") stack->GetYaxis()->SetTitle(Form("%s [%s]  ", yAxisLabel, yAxisUnit));
   if (yAxisOverride == "" && !showDivisionLabel && yAxisUnit == "") stack->GetYaxis()->SetTitle(Form("%s  ", yAxisLabel));
-  if (xAxisOverride == "") stack->GetXaxis()->SetTitle(Form("%s [%s]", xAxisLabel, xAxisUnit));
+  if (xAxisOverride == "" && showXaxisUnit == 0) stack->GetXaxis()->SetTitle(Form("%s", xAxisLabel));
+  if (xAxisOverride == "" && showXaxisUnit == 1) stack->GetXaxis()->SetTitle(Form("%s [%s]", xAxisLabel, xAxisUnit));
   if (xAxisOverride != "") stack->GetXaxis()->SetTitle(Form("%s", xAxisOverride));
   stack->GetYaxis()->SetTitleOffset(1.3);
   stack->Draw();
@@ -431,7 +443,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
       MC_error_2 += pow(Backgrounds[i]->GetBinError(ib), 2);
     }
     float data_value = Data->GetBinContent(ib);
-    float value = data_value/MC_value;
+    float value = (MC_value > 0 ? data_value/MC_value : 1000);
     err_hist->SetBinContent(ib, value);
     float MC_err = sqrt(MC_error_2);
     float data_err = Data->GetBinError(ib);
@@ -448,7 +460,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   line.SetLineColor(kGray+2);
   line.SetLineWidth(2);
   int maxbin = err_hist->GetXaxis()->GetNbins();
-  line.DrawLine(0,1,err_hist->GetXaxis()->GetBinUpEdge(maxbin),1);
+  line.DrawLine(err_hist->GetXaxis()->GetBinLowEdge(1),1,err_hist->GetXaxis()->GetBinUpEdge(maxbin),1);
   err_hist->Draw("PESAME");
   err_hist->GetXaxis()->SetLabelSize(0);
   err_hist->GetYaxis()->SetLabelSize(0.2);
