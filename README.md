@@ -55,4 +55,15 @@ Supported flags for "options" string:
   - --legendRight X: move the legend to the right by X (number from 0 to 1; you probably want around 0.05), negative numbers to move it to the left
   - --legendTextSize X: change the legend text size from its default value of 0.04
 
+Example:
+  std::vector <TH1F*> myVector;
+  myVector.push_back(CR1_ttsl);
+  myVector.push_back(CR1_ttdl);
+ 
+  std::vector <char*> myTitles;
+  myTitles.push_back("ttsl");
+  myTitles.push_back("ttdl");
+ 
+  makePlot(CR1_data, myVector, myTitles, "#tilde{t} #rightarrow t#tilde{#chi}_{1}^{0} ISR", "CR-0b", "--vLine 120 --outputName test_plot");
+
 E-mail Alex with bug reports or feature requests, george AT physics DOT ucsb
