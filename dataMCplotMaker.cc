@@ -357,6 +357,11 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     Colors.push_back(kRed-7);
     Colors.push_back(kGreen-2);
   }
+  else{
+    for (unsigned int i = 0; i < Backgrounds.size(); i++){
+      Colors = color_input;
+    }
+  }
 
   //Draw histogram with two pads
   TCanvas *c0 = new TCanvas("c0", "c0", 600, 700);
