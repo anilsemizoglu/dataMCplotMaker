@@ -69,113 +69,113 @@ const char* getString(std::string initial, std::string result){
 //Set style -- this is completely ripped off from TDRStyle.cc
 void SetTDRStyle(){
 
-  tdrStyle = new TStyle("tdrStyle","Style for P-TDR");
+  tdrStyleAG = new TStyle("tdrStyleAGAG","Style for P-TDR");
 
   // For the canvas:
-  tdrStyle->SetCanvasBorderMode(0);
-  tdrStyle->SetCanvasColor(kWhite);
-  tdrStyle->SetCanvasDefH(600); //Height of canvas
-  tdrStyle->SetCanvasDefW(800); //Width of canvas
-  tdrStyle->SetCanvasDefX(0);   //Position on screen
-  tdrStyle->SetCanvasDefY(0);
+  tdrStyleAG->SetCanvasBorderMode(0);
+  tdrStyleAG->SetCanvasColor(kWhite);
+  tdrStyleAG->SetCanvasDefH(600); //Height of canvas
+  tdrStyleAG->SetCanvasDefW(800); //Width of canvas
+  tdrStyleAG->SetCanvasDefX(0);   //Position on screen
+  tdrStyleAG->SetCanvasDefY(0);
 
   // For the Pad:
-  tdrStyle->SetPadBorderMode(0);
-  tdrStyle->SetPadColor(kWhite);
-  tdrStyle->SetPadGridX(false);
-  tdrStyle->SetPadGridY(false);
-  tdrStyle->SetGridColor(0);
-  tdrStyle->SetGridStyle(3);
-  tdrStyle->SetGridWidth(1);
+  tdrStyleAG->SetPadBorderMode(0);
+  tdrStyleAG->SetPadColor(kWhite);
+  tdrStyleAG->SetPadGridX(false);
+  tdrStyleAG->SetPadGridY(false);
+  tdrStyleAG->SetGridColor(0);
+  tdrStyleAG->SetGridStyle(3);
+  tdrStyleAG->SetGridWidth(1);
 
   // For the frame:
-  tdrStyle->SetFrameBorderMode(0);
-  tdrStyle->SetFrameBorderSize(1);
-  tdrStyle->SetFrameFillColor(0);
-  tdrStyle->SetFrameFillStyle(0);
-  tdrStyle->SetFrameLineColor(1);
-  tdrStyle->SetFrameLineStyle(1);
-  tdrStyle->SetFrameLineWidth(1);
+  tdrStyleAG->SetFrameBorderMode(0);
+  tdrStyleAG->SetFrameBorderSize(1);
+  tdrStyleAG->SetFrameFillColor(0);
+  tdrStyleAG->SetFrameFillStyle(0);
+  tdrStyleAG->SetFrameLineColor(1);
+  tdrStyleAG->SetFrameLineStyle(1);
+  tdrStyleAG->SetFrameLineWidth(1);
 
   //For the histo:
-  tdrStyle->SetHistLineColor(1);
-  tdrStyle->SetHistLineWidth(2);
+  tdrStyleAG->SetHistLineColor(1);
+  tdrStyleAG->SetHistLineWidth(2);
 
-  tdrStyle->SetEndErrorSize(2);
-  tdrStyle->SetMarkerStyle(20);
+  tdrStyleAG->SetEndErrorSize(2);
+  tdrStyleAG->SetMarkerStyle(20);
 
   //For the fit/function:
-  tdrStyle->SetOptFit(1);
-  tdrStyle->SetFitFormat("5.4g");
-  tdrStyle->SetFuncColor(2);
-  tdrStyle->SetFuncStyle(1);
-  tdrStyle->SetFuncWidth(1);
+  tdrStyleAG->SetOptFit(1);
+  tdrStyleAG->SetFitFormat("5.4g");
+  tdrStyleAG->SetFuncColor(2);
+  tdrStyleAG->SetFuncStyle(1);
+  tdrStyleAG->SetFuncWidth(1);
 
   //For the date:
-  tdrStyle->SetOptDate(0);
+  tdrStyleAG->SetOptDate(0);
 
   //For the statistics box:
-  tdrStyle->SetOptFile(0);
-  tdrStyle->SetOptStat(0); // To display the mean and RMS:   SetOptStat("mr");
-  tdrStyle->SetOptFit(0); // To display the mean and RMS:   SetOptStat("mr");
-  tdrStyle->SetStatColor(kWhite);
-  tdrStyle->SetStatFont(42);
-  tdrStyle->SetStatFontSize(0.025);
-  tdrStyle->SetStatTextColor(1);
-  tdrStyle->SetStatFormat("6.4g");
-  tdrStyle->SetStatBorderSize(1);
-  tdrStyle->SetStatH(0.1);
-  tdrStyle->SetStatW(0.15);
+  tdrStyleAG->SetOptFile(0);
+  tdrStyleAG->SetOptStat(0); // To display the mean and RMS:   SetOptStat("mr");
+  tdrStyleAG->SetOptFit(0); // To display the mean and RMS:   SetOptStat("mr");
+  tdrStyleAG->SetStatColor(kWhite);
+  tdrStyleAG->SetStatFont(42);
+  tdrStyleAG->SetStatFontSize(0.025);
+  tdrStyleAG->SetStatTextColor(1);
+  tdrStyleAG->SetStatFormat("6.4g");
+  tdrStyleAG->SetStatBorderSize(1);
+  tdrStyleAG->SetStatH(0.1);
+  tdrStyleAG->SetStatW(0.15);
 
   //Margins:
-  tdrStyle->SetPadTopMargin(0.10);
-  tdrStyle->SetPadBottomMargin(0.15);
-  tdrStyle->SetPadLeftMargin(0.15);
-  tdrStyle->SetPadRightMargin(0.04);
+  tdrStyleAG->SetPadTopMargin(0.10);
+  tdrStyleAG->SetPadBottomMargin(0.15);
+  tdrStyleAG->SetPadLeftMargin(0.15);
+  tdrStyleAG->SetPadRightMargin(0.04);
 
   //For the Global title:
-  tdrStyle->SetOptTitle(1);
-  tdrStyle->SetTitleFont(42);
-  tdrStyle->SetTitleColor(1);
-  tdrStyle->SetTitleTextColor(1);
-  tdrStyle->SetTitleFillColor(10);
-  tdrStyle->SetTitleFontSize(0.05);
-  tdrStyle->SetTitleX(0.5); // Set the position of the title box
-  tdrStyle->SetTitleY(0.985); // Set the position of the title box
-  tdrStyle->SetTitleAlign(23);
-  tdrStyle->SetTitleStyle(0);
-  tdrStyle->SetTitleBorderSize(0);
-  tdrStyle->SetTitleFillColor(0);
+  tdrStyleAG->SetOptTitle(1);
+  tdrStyleAG->SetTitleFont(42);
+  tdrStyleAG->SetTitleColor(1);
+  tdrStyleAG->SetTitleTextColor(1);
+  tdrStyleAG->SetTitleFillColor(10);
+  tdrStyleAG->SetTitleFontSize(0.05);
+  tdrStyleAG->SetTitleX(0.5); // Set the position of the title box
+  tdrStyleAG->SetTitleY(0.985); // Set the position of the title box
+  tdrStyleAG->SetTitleAlign(23);
+  tdrStyleAG->SetTitleStyle(0);
+  tdrStyleAG->SetTitleBorderSize(0);
+  tdrStyleAG->SetTitleFillColor(0);
 
   //For the axis titles:
-  tdrStyle->SetTitleColor(1, "XYZ");
-  tdrStyle->SetTitleFont(42, "XYZ");
-  tdrStyle->SetTitleSize(0.05, "XYZ");
-  tdrStyle->SetTitleOffset(1.20, "X");
-  tdrStyle->SetTitleOffset(1.10, "Y"); 
+  tdrStyleAG->SetTitleColor(1, "XYZ");
+  tdrStyleAG->SetTitleFont(42, "XYZ");
+  tdrStyleAG->SetTitleSize(0.05, "XYZ");
+  tdrStyleAG->SetTitleOffset(1.20, "X");
+  tdrStyleAG->SetTitleOffset(1.10, "Y"); 
 
   //For the axis labels:
-  tdrStyle->SetLabelColor(1, "XYZ");
-  tdrStyle->SetLabelFont(42, "XYZ");
-  tdrStyle->SetLabelOffset(0.007, "XYZ");
-  tdrStyle->SetLabelSize(0.05, "XYZ");
+  tdrStyleAG->SetLabelColor(1, "XYZ");
+  tdrStyleAG->SetLabelFont(42, "XYZ");
+  tdrStyleAG->SetLabelOffset(0.007, "XYZ");
+  tdrStyleAG->SetLabelSize(0.05, "XYZ");
 
   //For the axis:
-  tdrStyle->SetAxisColor(1, "XYZ");
-  tdrStyle->SetStripDecimals(kTRUE);
-  tdrStyle->SetTickLength(0.03, "XYZ");
-  tdrStyle->SetNdivisions(510, "XYZ");
-  tdrStyle->SetPadTickX(1);  // To get tick marks on the opposite side of the frame
-  tdrStyle->SetPadTickY(1);
+  tdrStyleAG->SetAxisColor(1, "XYZ");
+  tdrStyleAG->SetStripDecimals(kTRUE);
+  tdrStyleAG->SetTickLength(0.03, "XYZ");
+  tdrStyleAG->SetNdivisions(510, "XYZ");
+  tdrStyleAG->SetPadTickX(1);  // To get tick marks on the opposite side of the frame
+  tdrStyleAG->SetPadTickY(1);
 
   //Change for log plots:
-  tdrStyle->SetOptLogx(0);
-  tdrStyle->SetOptLogy(0);
-  tdrStyle->SetOptLogz(0);
+  tdrStyleAG->SetOptLogx(0);
+  tdrStyleAG->SetOptLogy(0);
+  tdrStyleAG->SetOptLogz(0);
 
   //Postscript options:
-  tdrStyle->SetPaperSize(20.,20.);
-  tdrStyle->cd();
+  tdrStyleAG->SetPaperSize(20.,20.);
+  tdrStyleAG->cd();
 }
 
 void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <char*> Titles, char* title, char* title2, std::string options_string, std::vector <Color_t> color_input){
@@ -319,12 +319,22 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     Data->SetBinContent(Data->GetNbinsX(), Data->GetBinContent(Data->GetNbinsX())+Data->GetBinContent(Data->GetNbinsX()+1) );
   }
 
-  //Sort Backgrounds and Titles
+  std::vector <Color_t> Colors;
+
+  //Sort Backgrounds, with Titles and Colors
   if (preserveBackgroundOrder == 0){
     std::vector<PlotInfo> myPlotInfo;
  
     for (unsigned int i = 0; i < Backgrounds.size(); i++){
-      PlotInfo temp = {Backgrounds[i], Titles[i]};
+      PlotInfo temp;
+      temp.Plot = Backgrounds[i];
+      temp.Title = Titles[i];
+      if (color_input.size() > 0){
+        temp.Color = color_input[i];
+      }
+      else{
+        temp.Color = kWhite;
+      }
       myPlotInfo.push_back(temp);
     }
 
@@ -335,23 +345,17 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     for (unsigned int i = 0; i < myPlotInfo.size(); i++){
       Backgrounds.push_back(myPlotInfo[i].Plot);
       Titles.push_back(myPlotInfo[i].Title);
+      if (color_input.size() > 0) Colors.push_back(myPlotInfo[i].Color);
     }
   }
 
   //Set colors for histograms
-  std::vector <Color_t> Colors;
   if (color_input.size() == 0){ 
     Colors.push_back(kMagenta-5);
     Colors.push_back(kCyan-3);
     Colors.push_back(kOrange-2);
     Colors.push_back(kRed-7);
     Colors.push_back(kGreen-2);
-  }
-  else{
-    Colors = color_input;
-    while (Colors.size() < Backgrounds.size()){
-      Colors.push_back(kWhite);
-    }
   }
 
   //Draw histogram with two pads
