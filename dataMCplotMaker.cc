@@ -359,7 +359,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   }
   else{
     for (unsigned int i = 0; i < Backgrounds.size(); i++){
-      Colors = color_input;
+      Colors.push_back(color_input[i]);
     }
   }
 
