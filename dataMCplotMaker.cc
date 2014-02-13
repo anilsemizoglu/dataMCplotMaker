@@ -1,16 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include "TH1F.h"
-#include "TCanvas.h"
-#include "THStack.h"
-#include "TStyle.h"
-#include "TLegend.h"
-#include "TLine.h"
-#include "TLatex.h"
-#include "TChain.h"
-#include "TCut.h"
-#include "TROOT.h"
 #include "dataMCplotMaker.h"
 
 //Comparison to put smallest histogram on bottom of stack
@@ -47,7 +34,7 @@ float AdjustedMaximum(std::vector <TH1F*> Plots){
     }
     heights.push_back(temp);
   }
-  sort( heights.begin(), heights.end() );
+  std::sort( heights.begin(), heights.end() );
   return heights[heights.size()-1];
 }
 
@@ -338,7 +325,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
       myPlotInfo.push_back(temp);
     }
 
-    sort(myPlotInfo.begin(), myPlotInfo.end(), Integral);
+    std::sort(myPlotInfo.begin(), myPlotInfo.end(), Integral);
     Backgrounds.clear();
     Titles.clear();
 
