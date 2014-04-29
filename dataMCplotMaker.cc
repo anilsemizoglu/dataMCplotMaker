@@ -375,7 +375,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   else if (setMinimum == -1 && !linear) stack->SetMinimum(0.5);
   if (setMinimum == -1 && linear) stack->SetMinimum(0);
   gStyle->SetTitleFontSize(0.03);
-  stack->Draw();
+  stack->Draw("hist");
   float myMax = 0;
   if (setMaximum != -1) myMax = setMaximum;
   else if (setMaximum == -1 && !linear && stack->GetMinimum() > 0) myMax = pow(stack->GetMinimum(), -1.0/3.0) * pow(AdjustedMaximum(Backgrounds), 4.0/3.0);
@@ -392,7 +392,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   if (xAxisOverride == "" && showXaxisUnit == 1) stack->GetXaxis()->SetTitle(Form("%s [%s]", xAxisLabel, xAxisUnit));
   if (xAxisOverride != "") stack->GetXaxis()->SetTitle(Form("%s", xAxisOverride));
   stack->GetYaxis()->SetTitleOffset(1.3);
-  stack->Draw();
+  stack->Draw("hist");
   THStack *stack2 = new THStack("stack2", "mtInCR1_data"); 
   stack2->Add(Data);
   stack2->Draw("PSAMEE");
