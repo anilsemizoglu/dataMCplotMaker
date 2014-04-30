@@ -351,7 +351,8 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   }
 
   //Draw histogram with two pads
-  TCanvas *c0 = new TCanvas("c0", "c0", 600, 700);
+  //TCanvas *c0 = new TCanvas("c0", "c0", 600, 700);
+  TCanvas c0("c0", "c0", 600, 700);
   TPad* finPad[2];
   finPad[0] = new TPad("1", "1", 0.0, 0.0, 1.0, 0.885);
   if (!linear) finPad[0]->SetLogy();
@@ -412,13 +413,13 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   tex->DrawLatex(0.2,0.78,title2);
   for (unsigned int i = 0; i < vLines.size(); i++){
     TLine linecut;
-    c0->Update();
+    c0.Update();
     linecut.SetLineStyle(2);
     linecut.SetLineWidth(2);
     linecut.SetLineColor(kGray+2);
     linecut.DrawLine(vLines[i],0.,vLines[i],100000000000000);
   }
-  c0->cd();
+  c0.cd();
   tex->SetTextSize(0.035);
   if (overrideHeader == "") tex->DrawLatex(0.17,0.962,Form("%s #sqrt{s} = %s TeV,  #scale[0.6]{#int}Ldt = %s fb^{-1}", type, energy, lumi));
   if (overrideHeader != "") tex->DrawLatex(0.17,0.962,Form("%s", overrideHeader));
@@ -464,5 +465,5 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   err_hist->GetYaxis()->SetNdivisions(505);
 
   //Print plot as pdf 
-  c0->Print(Form("%s.pdf", outputName));
+  c0.Print(Form("%s.pdf", outputName));
 }
