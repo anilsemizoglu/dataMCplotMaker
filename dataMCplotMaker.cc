@@ -204,57 +204,57 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     else if (Options[i].find("noOverflow") < Options[i].length()) doOverflow = 0; 
     else if (Options[i].find("noXaxisUnit") < Options[i].length()) showXaxisUnit = 0; 
     else if (Options[i].find("energy") < Options[i].length()){
-      energy = new char[sizeof(getString(Options[i], "energy")) + 1];
+      energy = new char[strlen(getString(Options[i], "energy")) + 1];
       std::strcpy(energy, getString(Options[i], "energy"));
     }
     else if (Options[i].find("lumi") < Options[i].length()){
-      lumi = new char[sizeof(getString(Options[i], "lumi")) + 1];
+      lumi = new char[strlen(getString(Options[i], "lumi")) + 1];
       std::strcpy(lumi, getString(Options[i], "lumi"));
     }
     else if (Options[i].find("yAxisLabel") < Options[i].length()){
-      yAxisLabel = new char[sizeof(getString(Options[i], "yAxisLabel")) + 1];
+      yAxisLabel = new char[strlen(getString(Options[i], "yAxisLabel")) + 1];
       std::strcpy(yAxisLabel, getString(Options[i], "yAxisLabel"));
     }
     else if (Options[i].find("yAxisUnit") < Options[i].length()){
-      yAxisUnit = new char[sizeof(getString(Options[i], "yAxisUnit")) + 1];
+      yAxisUnit = new char[strlen(getString(Options[i], "yAxisUnit")) + 1];
       std::strcpy(yAxisUnit, getString(Options[i], "yAxisUnit"));
     }
     else if (Options[i].find("yAxisOverride") < Options[i].length()){
-      yAxisOverride = new char[sizeof(getString(Options[i], "yAxisOverride")) + 3];
+      yAxisOverride = new char[strlen(getString(Options[i], "yAxisOverride")) + 3];
       std::strcpy(yAxisOverride, getString(Options[i], "yAxisOverride"));
       strcat( yAxisOverride, "  " );
     }
     else if (Options[i].find("xAxisLabel") < Options[i].length()){
-      xAxisLabel = new char[sizeof(getString(Options[i], "xAxisLabel")) + 1];
+      xAxisLabel = new char[strlen(getString(Options[i], "xAxisLabel")) + 1];
       std::strcpy(xAxisLabel, getString(Options[i], "xAxisLabel"));
     }
     else if (Options[i].find("xAxisUnit") < Options[i].length()){
-      xAxisUnit = new char[sizeof(getString(Options[i], "xAxisUnit")) + 1];
+      xAxisUnit = new char[strlen(getString(Options[i], "xAxisUnit")) + 1];
       std::strcpy(xAxisUnit, getString(Options[i], "xAxisUnit"));
     }
     else if (Options[i].find("xAxisOverride") < Options[i].length()){
-      xAxisOverride = new char[sizeof(getString(Options[i], "xAxisOverride")) + 1];
+      xAxisOverride = new char[strlen(getString(Options[i], "xAxisOverride")) + 1];
       strcat( xAxisOverride, "  " );
       std::strcpy(xAxisOverride, getString(Options[i], "xAxisOverride"));
     }
     else if (Options[i].find("dataName") < Options[i].length()){
-      dataName = new char[sizeof(getString(Options[i], "dataName")) + 1];
+      dataName = new char[strlen(getString(Options[i], "dataName")) + 1];
       std::strcpy(dataName, getString(Options[i], "dataName"));
     }
     else if (Options[i].find("topYaxisTitle") < Options[i].length()){
-      topYaxisTitle = new char[sizeof(getString(Options[i], "topYaxisTitle")) + 1];
+      topYaxisTitle = new char[strlen(getString(Options[i], "topYaxisTitle")) + 1];
       std::strcpy(topYaxisTitle, getString(Options[i], "topYaxisTitle"));
     }
     else if (Options[i].find("type") < Options[i].length()){
-      type = new char[sizeof(getString(Options[i], "type")) + 1];
+      type = new char[strlen(getString(Options[i], "type")) + 1];
       std::strcpy(type, getString(Options[i], "type"));
     }
     else if (Options[i].find("overrideHeader") < Options[i].length()){
-      overrideHeader = new char[sizeof(getString(Options[i], "overrideHeader")) + 1];
+      overrideHeader = new char[strlen(getString(Options[i], "overrideHeader")) + 1];
       std::strcpy(overrideHeader, getString(Options[i], "overrideHeader"));
     }
     else if (Options[i].find("outputName") < Options[i].length()){
-      outputName = new char[sizeof(getString(Options[i], "outputName")) + 1];
+      outputName = new char[strlen(getString(Options[i], "outputName")) + 1];
       std::strcpy(outputName, getString(Options[i], "outputName"));
     }
     else if (Options[i].find("vLine") < Options[i].length()){
@@ -351,7 +351,6 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   }
 
   //Draw histogram with two pads
-  //TCanvas *c0 = new TCanvas("c0", "c0", 600, 700);
   TCanvas c0("c0", "c0", 600, 700);
   TPad* finPad[2];
   finPad[0] = new TPad("1", "1", 0.0, 0.0, 1.0, 0.885);
