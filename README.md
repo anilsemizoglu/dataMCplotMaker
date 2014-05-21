@@ -48,7 +48,7 @@ Supported flags for "options" string:
   - --legendRight X: move the legend to the right by X (number from 0 to 1; you probably want around 0.05), negative numbers to move it to the left
   - --legendTextSize X: change the legend text size from its default value of 0.04
   - --divHalf: reduce the number of x-axis divisions by half
-  - --nDivisions X: change the number of x-axis to X, where X = number of primary divisions + 100*number of secondary divisions + 10000*number of tertiary divisions; positive to allow it to optimize (strongly recommended), negative to require it to use your values
+  - --nDivisions X: change the number of x-axis divisions to X, where X = number of primary divisions + 100*number of secondary divisions + 10000*number of tertiary divisions; positive to allow it to optimize (strongly recommended), negative to require it to use your values
 
 Example:
   - std::vector < TH1F* > myVector;
