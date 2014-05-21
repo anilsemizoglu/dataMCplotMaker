@@ -429,7 +429,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   tex->SetTextSize(0.035);
   if (overrideHeader == "") tex->DrawLatex(0.17,0.962,Form("%s #sqrt{s} = %s TeV,  #scale[0.6]{#int}Ldt = %s fb^{-1}", type, energy, lumi));
   if (overrideHeader != "") tex->DrawLatex(0.17,0.962,Form("%s", overrideHeader));
-  if (stack->GetMaximum() > 100000) finPad[0]->SetPad(0.0, 0.0, 1.0, 0.84);
+  if (stack->GetMaximum() > 100000 && linear) finPad[0]->SetPad(0.0, 0.0, 1.0, 0.84);
   if (doHalf){
     Int_t sign = (stack->GetXaxis()->GetNdivisions() > 0) ? 1 : -1;
     Int_t orig = abs(stack->GetXaxis()->GetNdivisions());
@@ -440,7 +440,6 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   }
   if (nDivisions != -1 && nDivisions > 0) stack->GetXaxis()->SetNdivisions(nDivisions, kTRUE);
   if (nDivisions != -1 && nDivisions < 0) stack->GetXaxis()->SetNdivisions(nDivisions, kFALSE);
-  cout << "blah: " <<  stack->GetXaxis()->GetNdivisions() << endl;
   finPad[1]->cd();
 
   //Second pad: data/MC yields
