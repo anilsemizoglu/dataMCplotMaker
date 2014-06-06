@@ -195,6 +195,8 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   float legendRight = 0;
   float legendTextSize = 0.04;
   vector <float> vLines;
+  bool doHalf = 0;
+  Int_t nDivisions = -1;
 
   //Loop over options and change default settings to user-defined settings
   for (unsigned int i = 0; i < Options.size(); i++){
@@ -203,6 +205,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     else if (Options[i].find("noDivisionLabel") < Options[i].length()) showDivisionLabel = 0; 
     else if (Options[i].find("noOverflow") < Options[i].length()) doOverflow = 0; 
     else if (Options[i].find("noXaxisUnit") < Options[i].length()) showXaxisUnit = 0; 
+    else if (Options[i].find("divHalf") < Options[i].length()) doHalf = 1; 
     else if (Options[i].find("energy") < Options[i].length()){
       energy = new char[strlen(getString(Options[i], "energy")) + 1];
       std::strcpy(energy, getString(Options[i], "energy"));
@@ -274,6 +277,9 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     }
     else if (Options[i].find("setMinimum") < Options[i].length()){
       setMinimum = atof( getString(Options[i], "setMinimum") );
+    }
+    else if (Options[i].find("nDivisions") < Options[i].length()){
+      nDivisions = atoi( getString(Options[i], "nDivisions") );
     }
     else cout << "Warning: Option not recognized!  Option: " << Options[i] << endl;
   }
@@ -422,6 +428,17 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   tex->SetTextSize(0.035);
   if (overrideHeader == "") tex->DrawLatex(0.17,0.962,Form("%s #sqrt{s} = %s TeV,  #scale[0.6]{#int}Ldt = %s fb^{-1}", type, energy, lumi));
   if (overrideHeader != "") tex->DrawLatex(0.17,0.962,Form("%s", overrideHeader));
+  if (stack->GetMaximum() > 100000 && linear) finPad[0]->SetPad(0.0, 0.0, 1.0, 0.84);
+  if (doHalf){
+    Int_t sign = (stack->GetXaxis()->GetNdivisions() > 0) ? 1 : -1;
+    Int_t orig = abs(stack->GetXaxis()->GetNdivisions());
+    Int_t orig_high =orig-orig%100;
+    Int_t orig_low = orig%100;
+    Int_t new_ndiv = (orig_low%2==1) ? orig_high+orig_low/2 : orig_high + (orig_low-1)/2;
+    stack->GetXaxis()->SetNdivisions(new_ndiv, (sign>0) ? kTRUE : kFALSE);
+  }
+  if (nDivisions != -1 && nDivisions > 0) stack->GetXaxis()->SetNdivisions(nDivisions, kTRUE);
+  if (nDivisions != -1 && nDivisions < 0) stack->GetXaxis()->SetNdivisions(nDivisions, kFALSE);
   finPad[1]->cd();
 
   //Second pad: data/MC yields
