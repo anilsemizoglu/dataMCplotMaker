@@ -25,7 +25,7 @@ vector <std::string> GetParms(std::string blah){
 }
 
 //Function to determine maximum of each histogram, including error bars
-float AdjustedMaximum(std::vector <TH1F*> Plots){
+float AdjustedMaximum(std::vector <TH1F*> Plots, TH1F* data){
   vector <float> heights;
   for (int i = 0; i < Plots[0]->GetNbinsX()+2; i++){
     float temp = 0;
@@ -35,7 +35,14 @@ float AdjustedMaximum(std::vector <TH1F*> Plots){
     heights.push_back(temp);
   }
   std::sort( heights.begin(), heights.end() );
-  return heights[heights.size()-1];
+  float bkgd_height = heights[heights.size()-1];
+  heights.clear();
+  for (int i = 0; i < data->GetNbinsX()+2; i++){
+    heights.push_back(data->GetBinContent(i)+data->GetBinError(i));
+  }
+  std::sort( heights.begin(), heights.end() );
+  float data_height = heights[heights.size()-1];
+  return max(data_height, bkgd_height);
 }
 
 //Turn parsed argument from string into const char*.  Remove leading and trailing whitespace
@@ -185,7 +192,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   char* dataName = "data";
   char* topYaxisTitle = "data/SM";
   char* overrideHeader = "";
-  char* type = "CMS Preliminary                ";
+  char* type = "CMS Preliminary        ";
   char* outputName = "data_MC_plot";
   bool preserveBackgroundOrder = 0;
   bool showDivisionLabel = 1;
@@ -384,8 +391,8 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   stack->Draw("hist");
   float myMax = 0;
   if (setMaximum != -1) myMax = setMaximum;
-  else if (setMaximum == -1 && !linear && stack->GetMinimum() > 0) myMax = pow(stack->GetMinimum(), -1.0/3.0) * pow(AdjustedMaximum(Backgrounds), 4.0/3.0);
-  else if (setMaximum == -1 && linear && stack->GetMinimum() > 0)  myMax = (AdjustedMaximum(Backgrounds))*(4.0/3.0) - (stack->GetMinimum())*(1.0/3.0);
+  else if (setMaximum == -1 && !linear && stack->GetMinimum() > 0) myMax = pow(stack->GetMinimum(), -1.0/3.0) * pow(AdjustedMaximum(Backgrounds, Data), 4.0/3.0);
+  else if (setMaximum == -1 && linear && stack->GetMinimum() > 0)  myMax = (AdjustedMaximum(Backgrounds, Data))*(4.0/3.0) - (stack->GetMinimum())*(1.0/3.0);
   else if (!linear) myMax = stack->GetMaximum()*20.0;
   else myMax = stack->GetMaximum()*2;
   stack->SetMaximum(myMax);
@@ -428,7 +435,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   tex->SetTextSize(0.035);
   if (overrideHeader == "") tex->DrawLatex(0.17,0.962,Form("%s #sqrt{s} = %s TeV,  #scale[0.6]{#int}Ldt = %s fb^{-1}", type, energy, lumi));
   if (overrideHeader != "") tex->DrawLatex(0.17,0.962,Form("%s", overrideHeader));
-  if (stack->GetMaximum() > 100000 && linear) finPad[0]->SetPad(0.0, 0.0, 1.0, 0.84);
+  if (stack->GetMaximum() > 80000 && linear) finPad[0]->SetPad(0.0, 0.0, 1.0, 0.84);
   if (doHalf){
     Int_t sign = (stack->GetXaxis()->GetNdivisions() > 0) ? 1 : -1;
     Int_t orig = abs(stack->GetXaxis()->GetNdivisions());
