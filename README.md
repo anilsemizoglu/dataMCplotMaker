@@ -1,7 +1,7 @@
 dataMCplotMaker
 ===============
 
-Function to quickly make nice data/MC plots.  In addition to formatting, it automatically makes an overflow bin for your data, automatically puts the smallest backgrounds on the bottom, and automatically chooses a reasonable maximum and minimum.  
+Function to quickly make nice data/MC plots or data plots.  In addition to formatting, it automatically makes an overflow bin for your data, automatically puts the smallest backgrounds on the bottom, and automatically chooses a reasonable maximum and minimum.  
 
 To run:
   1.  Put both .cc and .h files in the same directory
@@ -12,7 +12,7 @@ To call the function:
   - dataMCplotMaker(TH1F* data, std::vector < TH1F* > Backgrounds, std::vector < char* > Titles*, char* title, char* Title2, std::string Options, std::vector < Color_t > colors)
 
 Mandatory arguments:
-  - data: a histogram of the data
+  - data: a histogram of the data.  If you have no data, set this equal to a null histogram [TH1F* null = new TH1F("","",1,0,1) ].  The code is smart enough to give you a good-looking plot.  
   - backgrounds: a vector of histograms, each representing a background
   - titles: the name of each background, in the same order as the backgrounds vector
   - title: the title of the distribution
@@ -49,6 +49,7 @@ Supported flags for "options" string:
   - --legendTextSize X: change the legend text size from its default value of 0.04
   - --divHalf: reduce the number of x-axis divisions by half
   - --nDivisions X: change the number of x-axis divisions to X, where X = number of primary divisions + 100*number of secondary divisions + 10000*number of tertiary divisions; positive to allow it to optimize (strongly recommended), negative to require it to use your values
+  - --noLegend: to suppress the legend
 
 Example:
   - std::vector < TH1F* > myVector;
@@ -58,7 +59,5 @@ Example:
   - myTitles.push_back("ttsl");
   - myTitles.push_back("ttdl");
   - dataMCplotMaker(CR1_data, myVector, myTitles, "#tilde{t} #rightarrow t#tilde{#chi} _ {1}^{0} ISR", "CR-0b", "--vLine 120 --outputName test _ plot");
-
-Also: now a new function "plotMaker" to make plots if you don't want to do data/MC.  Same arguments as above, but skip the data argument (you must pass a vector of TH1F*s even if there is only one).  
 
 E-mail Alex with bug reports or feature requests, george AT physics DOT ucsb
