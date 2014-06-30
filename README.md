@@ -59,4 +59,6 @@ Example:
   - myTitles.push_back("ttdl");
   - dataMCplotMaker(CR1_data, myVector, myTitles, "#tilde{t} #rightarrow t#tilde{#chi} _ {1}^{0} ISR", "CR-0b", "--vLine 120 --outputName test _ plot");
 
+Also: now a new function "plotMaker" to make plots if you don't want to do data/MC.  Same arguments as above, but skip the data argument (you must pass a vector of TH1F*s even if there is only one).  
+
 E-mail Alex with bug reports or feature requests, george AT physics DOT ucsb
