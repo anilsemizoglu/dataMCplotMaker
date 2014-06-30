@@ -177,7 +177,6 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
 
   bool noData = false;
   if (Data->GetEntries() == 0) noData = true;
-  cout << noData << " " << Data->GetEntries() << endl;
 
   //Turn "options" string into vector of strings, one parm each
   std::vector <std::string> Options = GetParms(options_string);  
