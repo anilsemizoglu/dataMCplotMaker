@@ -173,7 +173,13 @@ void SetTDRStyle(){
   tdrStyleAG->cd();
 }
 
-void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <char*> Titles, char* title, char* title2, std::string options_string, std::vector <Color_t> color_input){
+void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <char*> Titles, std::string titleIn, std::string title2In, std::string options_string, std::vector <Color_t> color_input){
+
+  char* title = (char *)alloca(titleIn.size() + 1);
+  memcpy(title, titleIn.c_str(), titleIn.size() + 1);
+
+  char* title2 = (char *)alloca(title2In.size() + 1);
+  memcpy(title2, title2In.c_str(), title2In.size() + 1);
 
   bool noData = false;
   if (Data->GetEntries() == 0) noData = true;
@@ -185,19 +191,32 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   bool linear = 0;
   bool doOverflow = 1;
   bool showXaxisUnit = 1;
-  char* energy = "8";
-  char* lumi = "19.5";
-  char* yAxisLabel = "Entries";
-  char* yAxisUnit = "";
-  char* yAxisOverride = "";
-  char* xAxisLabel = "M_{T}";
-  char* xAxisUnit = "GeV";
-  char* xAxisOverride = "";
-  char* dataName = "data";
-  char* topYaxisTitle = "data/SM";
-  char* overrideHeader = "";
-  char* type = "CMS Preliminary ";
-  char* outputName = "data_MC_plot";
+  char* energy = new char[strlen("8")+2];
+  std::strcpy(energy, "8");
+  char* lumi = new char[strlen("19.5")+2];
+  std::strcpy(lumi, "19.5");
+  char* yAxisLabel = new char[strlen("Entries")+2];
+  std::strcpy(yAxisLabel, "Entries");
+  char* yAxisUnit = new char[strlen("")+2];
+  std::strcpy(yAxisUnit, "");
+  char* yAxisOverride = new char[strlen("")+1];
+  std::strcpy(yAxisOverride, "");
+  char* xAxisLabel = new char[strlen("M_{T}")+2];
+  std::strcpy(xAxisLabel, "M_{T}");
+  char* xAxisUnit = new char[strlen("GeV")+2];
+  std::strcpy(xAxisUnit, "GeV");
+  char* xAxisOverride = new char[strlen("")+2];
+  std::strcpy(xAxisOverride, "");
+  char* dataName = new char[strlen("data")+2];
+  std::strcpy(dataName, "data");
+  char* topYaxisTitle = new char[strlen("data/SM")+2];
+  std::strcpy(topYaxisTitle, "data/SM");
+  char* overrideHeader = new char[strlen("")+2];
+  std::strcpy(overrideHeader, "");
+  char* type = new char[strlen("CMS Preliminary ")+2];
+  std::strcpy(type, "CMS Preliminary ");
+  char* outputName = new char[strlen("data_MC_plot")+2];
+  std::strcpy(outputName, "data_MC_plot");
   bool preserveBackgroundOrder = 0;
   bool showDivisionLabel = 1;
   float setMaximum = -1;
@@ -236,7 +255,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
       std::strcpy(yAxisUnit, getString(Options[i], "yAxisUnit"));
     }
     else if (Options[i].find("yAxisOverride") < Options[i].length()){
-      yAxisOverride = new char[strlen(getString(Options[i], "yAxisOverride")) + 3];
+      yAxisOverride = new char[strlen(getString(Options[i], "yAxisOverride")) + 1];
       std::strcpy(yAxisOverride, getString(Options[i], "yAxisOverride"));
       strcat( yAxisOverride, "  " );
     }
@@ -307,14 +326,30 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     return;
   }
   if (Titles.size() != Backgrounds.size()) cout << "Warning! Not enough titles for your backgrounds!" << endl;
-  while (Titles.size() < Backgrounds.size()) Titles.push_back("");
+  while (Titles.size() < Backgrounds.size()){
+    char* blank = new char[strlen("")+2];
+    std::strcpy(blank, "");
+    Titles.push_back(blank);
+  }
 
   //Format Titles
   for (unsigned int i = 0; i < Titles.size(); i++){
     string title_temp = Titles[i];
-    if (title_temp == "ttsl" || title_temp == "1ltop" || title_temp == "1lep" || title_temp == "singlelep" || title_temp == "singlelepton") Titles[i] = "1 #font[12]{l} top";
-    if (title_temp == "ttdl" || title_temp == "2lep" || title_temp == "dilep" || title_temp == "dilepton") Titles[i] = "t#bar{t}#rightarrow #font[12]{ll}";
-    if (title_temp == "wjets") Titles[i] = "W+jets"; 
+    if (title_temp == "ttsl" || title_temp == "1ltop" || title_temp == "1lep" || title_temp == "singlelep" || title_temp == "singlelepton"){
+       char* temp = new char[strlen("1 #font[12]{l} top")+2];
+       std::strcpy(temp, "1 #font[12]{l} top");
+       Titles[i] = temp;
+    }
+    if (title_temp == "ttdl" || title_temp == "2lep" || title_temp == "dilep" || title_temp == "dilepton"){
+       char* temp = new char[strlen("t#bar{t}#rightarrow #font[12]{ll}")+2];
+       std::strcpy(temp, "t#bar{t}#rightarrow #font[12]{ll}");
+       Titles[i] = temp;
+    }
+    if (title_temp == "wjets"){
+       char* temp = new char[strlen("W+jets")+2];
+       std::strcpy(temp, "W+jets");
+       Titles[i] = temp;
+    }
   }
 
   //Do Overflow
@@ -415,14 +450,15 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   else if (!linear) myMax = stack->GetMaximum()*20.0;
   else myMax = stack->GetMaximum()*2;
   stack->SetMaximum(myMax);
-  if (yAxisOverride != "") stack->GetYaxis()->SetTitle(Form("%s", yAxisOverride));
-  if (yAxisOverride == "" && showDivisionLabel && yAxisUnit != "") stack->GetYaxis()->SetTitle(Form("%s [%s] / %.0f %s  ", yAxisLabel, yAxisUnit, Backgrounds[0]->GetXaxis()->GetBinWidth(1), xAxisUnit));
-  if (yAxisOverride == "" && showDivisionLabel && yAxisUnit == "") stack->GetYaxis()->SetTitle(Form("%s / %.0f %s  ", yAxisLabel, Backgrounds[0]->GetXaxis()->GetBinWidth(1), xAxisUnit));
-  if (yAxisOverride == "" && !showDivisionLabel && yAxisUnit != "") stack->GetYaxis()->SetTitle(Form("%s [%s]  ", yAxisLabel, yAxisUnit));
-  if (yAxisOverride == "" && !showDivisionLabel && yAxisUnit == "") stack->GetYaxis()->SetTitle(Form("%s  ", yAxisLabel));
-  if (xAxisOverride == "" && showXaxisUnit == 0) stack->GetXaxis()->SetTitle(Form("%s", xAxisLabel));
-  if (xAxisOverride == "" && showXaxisUnit == 1) stack->GetXaxis()->SetTitle(Form("%s [%s]", xAxisLabel, xAxisUnit));
-  if (xAxisOverride != "") stack->GetXaxis()->SetTitle(Form("%s", xAxisOverride));
+  if (yAxisOverride && yAxisOverride[0] != '\0') stack->GetYaxis()->SetTitle(Form("%s", yAxisOverride));
+  else if (yAxisOverride[0] == '\0' && showDivisionLabel && yAxisUnit[0] != '\0') stack->GetYaxis()->SetTitle(Form("%s [%s] / %.0f %s  ", yAxisLabel, yAxisUnit, Backgrounds[0]->GetXaxis()->GetBinWidth(1), xAxisUnit));
+  else if (yAxisOverride[0] == '\0' && showDivisionLabel && yAxisUnit[0] == '\0') stack->GetYaxis()->SetTitle(Form("%s / %.0f %s  ", yAxisLabel, Backgrounds[0]->GetXaxis()->GetBinWidth(1), xAxisUnit)); 
+  else if (yAxisOverride[0] == '\0' && !showDivisionLabel && yAxisUnit[0] != '\0')stack->GetYaxis()->SetTitle(Form("%s [%s]  ", yAxisLabel, yAxisUnit)); 
+  else if (yAxisOverride[0] == '\0' && !showDivisionLabel && yAxisUnit[0] == '\0')stack->GetYaxis()->SetTitle(Form("%s  ", yAxisLabel));
+  else cout << "nothing" << endl;
+  if (xAxisOverride[0] == '\0' && showXaxisUnit == 0) stack->GetXaxis()->SetTitle(Form("%s", xAxisLabel));
+  if (xAxisOverride[0] == '\0' && showXaxisUnit == 1) stack->GetXaxis()->SetTitle(Form("%s [%s]", xAxisLabel, xAxisUnit));
+  if (xAxisOverride[0] != '\0') stack->GetXaxis()->SetTitle(Form("%s", xAxisOverride));
   stack->GetYaxis()->SetTitleOffset(1.8);
   stack->Draw("hist");
   THStack *stack2 = new THStack("stack2", "mtInCR1_data"); 
@@ -460,8 +496,8 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   }
   c0.cd();
   tex->SetTextSize(0.035);
-  if (overrideHeader == "") tex->DrawLatex(0.17,0.962,Form("%s        #sqrt{s} = %s TeV,  #scale[0.6]{#int}Ldt = %s fb^{-1}", type, energy, lumi));
-  if (overrideHeader != "") tex->DrawLatex(0.17,0.962,Form("%s", overrideHeader));
+  if (overrideHeader && overrideHeader[0] == '\0') tex->DrawLatex(0.17,0.962,Form("%s        #sqrt{s} = %s TeV,  #scale[0.6]{#int}Ldt = %s fb^{-1}", type, energy, lumi));
+  if (overrideHeader && overrideHeader[0] != '\0') tex->DrawLatex(0.17,0.962,Form("%s", overrideHeader));
   if (!noData && stack->GetMaximum() > 80000 && linear) finPad[0]->SetPad(0.0, 0.0, 1.0, 0.84);
   if (doHalf){
     Int_t sign = (stack->GetXaxis()->GetNdivisions() > 0) ? 1 : -1;
