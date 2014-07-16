@@ -390,13 +390,14 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     }
   }
 
-  //Set colors for histograms
+  //Set colors for histograms (this is my color scheme, but based on "approved" one from STOP)
   if (color_input.size() == 0){ 
-    Colors.push_back(kMagenta-5);
+    Colors.push_back(kGreen-2);   //note: not part of default
+    Colors.push_back(kBlue-4);
     Colors.push_back(kCyan-3);
-    Colors.push_back(kOrange-2);
+    Colors.push_back(kOrange-7);  //note: stop uses -2
     Colors.push_back(kRed-7);
-    Colors.push_back(kGreen-2);
+    Colors.push_back(kMagenta-5);
   }
   else{
     for (unsigned int i = 0; i < Backgrounds.size(); i++){
@@ -446,7 +447,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   float myMax = 0;
   if (setMaximum != -1) myMax = setMaximum;
   else if (setMaximum == -1 && !linear && stack->GetMinimum() > 0) myMax = pow(stack->GetMinimum(), -1.0/3.0) * pow(AdjustedMaximum(Backgrounds, Data), 4.0/3.0);
-  else if (setMaximum == -1 && linear && stack->GetMinimum() > 0)  myMax = (AdjustedMaximum(Backgrounds, Data))*(4.0/3.0) - (stack->GetMinimum())*(1.0/3.0);
+  else if (setMaximum == -1 && linear)  myMax = (AdjustedMaximum(Backgrounds, Data))*(4.0/3.0) - (stack->GetMinimum())*(1.0/3.0);
   else if (!linear) myMax = stack->GetMaximum()*20.0;
   else myMax = stack->GetMaximum()*2;
   stack->SetMaximum(myMax);
