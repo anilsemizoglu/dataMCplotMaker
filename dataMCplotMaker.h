@@ -25,7 +25,7 @@ struct PlotInfo {
 
 TStyle *tdrStyleAG = NULL;
 
-void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <char*> Titles, std::string titleIn = "", std::string title2In = "", std::string options_string = "", std::vector <Color_t> color_input = std::vector<Color_t>());
+void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <char*> Titles, std::string titleIn = "", std::string title2In = "", std::string options_string = "", std::vector <TH1F*> Signals = std::vector<TH1F*>(), std::vector <char*> SignalTitles = std::vector<char*>(), std::vector <Color_t> color_input = std::vector<Color_t>());
 
 
 
