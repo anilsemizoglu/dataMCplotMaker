@@ -69,8 +69,8 @@ void SetTDRStyle(){
   // For the canvas:
   tdrStyleAG->SetCanvasBorderMode(0);
   tdrStyleAG->SetCanvasColor(kWhite);
-  tdrStyleAG->SetCanvasDefH(600); //Height of canvas
-  tdrStyleAG->SetCanvasDefW(800); //Width of canvas
+  tdrStyleAG->SetCanvasDefH(550); //Height of canvas
+  tdrStyleAG->SetCanvasDefW(600); //Width of canvas
   tdrStyleAG->SetCanvasDefX(0);   //Position on screen
   tdrStyleAG->SetCanvasDefY(0);
 
@@ -145,7 +145,7 @@ void SetTDRStyle(){
   //For the axis titles:
   tdrStyleAG->SetTitleColor(1, "XYZ");
   tdrStyleAG->SetTitleFont(42, "XYZ");
-  tdrStyleAG->SetTitleSize(0.05, "XYZ");
+  tdrStyleAG->SetTitleSize(0.035, "XYZ");
   tdrStyleAG->SetTitleOffset(1.20, "X");
   tdrStyleAG->SetTitleOffset(1.10, "Y"); 
 
@@ -153,7 +153,7 @@ void SetTDRStyle(){
   tdrStyleAG->SetLabelColor(1, "XYZ");
   tdrStyleAG->SetLabelFont(42, "XYZ");
   tdrStyleAG->SetLabelOffset(0.007, "XYZ");
-  tdrStyleAG->SetLabelSize(0.05, "XYZ");
+  tdrStyleAG->SetLabelSize(0.035, "XYZ");
 
   //For the axis:
   tdrStyleAG->SetAxisColor(1, "XYZ");
@@ -319,6 +319,9 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   //Set Style
   SetTDRStyle();
   gStyle->SetOptStat(0);
+  if (noData) gStyle->SetPadBottomMargin(.12);
+  if (noData) gStyle->SetPadLeftMargin(.12);
+  if (noData) gStyle->SetPadTopMargin(.07);
 
   //Make sure there is at least one background and enough titles
   if (Backgrounds.size() < 1){ 
@@ -406,9 +409,10 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   }
 
   //Draw histogram with two pads
-  TCanvas c0("c0", "c0", 600, 700);
+  TCanvas c0("c0", "c0"); //, 600, 700);
   TPad* finPad[2];
   if (noData == false){
+    c0.SetCanvasSize(600, 700);
     finPad[0] = new TPad("1", "1", 0.0, 0.0, 1.0, 0.885);
     if (!linear) finPad[0]->SetLogy();
     finPad[0]->SetLeftMargin(0.18);
@@ -418,14 +422,10 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     finPad[0]->cd();
   }
   if (noData == true){
-    finPad[0] = new TPad("1", "1", 0.0, 0.0, 1.0, 1.0);
-    if (!linear) finPad[0]->SetLogy();
-    finPad[0]->SetTopMargin(0.07);
-    finPad[0]->SetLeftMargin(0.18);
-    finPad[1] = new TPad("2", "2", 0.0, 0.0, 0.001,0.001);
-    finPad[0]->Draw();
-    finPad[1]->Draw();
-    finPad[0]->cd();
+    c0.SetCanvasSize(600, 550);
+    finPad[0] = new TPad();
+    finPad[1] = new TPad();
+    if (!linear) c0.SetLogy();
   }
 
   //First pad: histogram
@@ -460,7 +460,8 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   if (xAxisOverride[0] == '\0' && showXaxisUnit == 0) stack->GetXaxis()->SetTitle(Form("%s", xAxisLabel));
   if (xAxisOverride[0] == '\0' && showXaxisUnit == 1) stack->GetXaxis()->SetTitle(Form("%s [%s]", xAxisLabel, xAxisUnit));
   if (xAxisOverride[0] != '\0') stack->GetXaxis()->SetTitle(Form("%s", xAxisOverride));
-  stack->GetYaxis()->SetTitleOffset(1.8);
+  if (!noData) stack->GetYaxis()->SetTitleOffset(1.8);
+  if (noData) stack->GetYaxis()->SetTitleOffset(1.4);
   stack->Draw("hist");
   THStack *stack2 = new THStack("stack2", "mtInCR1_data"); 
   stack2->Add(Data);
@@ -497,8 +498,9 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   }
   c0.cd();
   tex->SetTextSize(0.035);
-  if (overrideHeader && overrideHeader[0] == '\0') tex->DrawLatex(0.17,0.962,Form("%s        #sqrt{s} = %s TeV,  #scale[0.6]{#int}Ldt = %s fb^{-1}", type, energy, lumi));
-  if (overrideHeader && overrideHeader[0] != '\0') tex->DrawLatex(0.17,0.962,Form("%s", overrideHeader));
+  float type_y = .96;
+  if (overrideHeader && overrideHeader[0] == '\0') tex->DrawLatex(0.17,type_y,Form("%s        #sqrt{s} = %s TeV,  #scale[0.6]{#int}Ldt = %s fb^{-1}", type, energy, lumi));
+  if (overrideHeader && overrideHeader[0] != '\0') tex->DrawLatex(0.17,type_y,Form("%s", overrideHeader));
   if (!noData && stack->GetMaximum() > 80000 && linear) finPad[0]->SetPad(0.0, 0.0, 1.0, 0.84);
   if (doHalf){
     Int_t sign = (stack->GetXaxis()->GetNdivisions() > 0) ? 1 : -1;
