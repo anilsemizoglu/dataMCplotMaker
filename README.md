@@ -1,7 +1,7 @@
 dataMCplotMaker
 ===============
 
-Function to quickly make nice data/MC plots or data plots.  In addition to formatting, it automatically makes an overflow bin for your data, automatically puts the smallest backgrounds on the bottom, and automatically chooses a reasonable maximum and minimum.  
+Function to quickly make nice data/MC plots or data plots, with or without signal.  In addition to formatting, it automatically makes an overflow bin for your data, automatically puts the smallest backgrounds on the bottom, and automatically chooses a reasonable maximum and minimum.  
 
 To run:
   1.  Put both .cc and .h files in the same directory
@@ -9,7 +9,7 @@ To run:
   3.  In root, compile the .cc file (.L path/dataMCplotMaker.cc+) before loading and compiling your file.
 
 To call the function:
-  - dataMCplotMaker(TH1F* data, std::vector < TH1F* > Backgrounds, std::vector < char* > Titles*, char* title, char* Title2, std::string Options, std::vector < Color_t > colors)
+  - dataMCplotMaker(TH1F* data, std::vector < TH1F* > Backgrounds, std::vector < char* > Titles, char* title, char* Title2, std::string Options, std::vector < TH1F* > Signals, std::vector < char* > SignalTitles, std::vector < Color_t > colors)
 
 Mandatory arguments:
   - data: a histogram of the data.  If you have no data, set this equal to a null histogram [TH1F* null = new TH1F("","",1,0,1) ].  The code is smart enough to give you a good-looking plot.  
@@ -20,7 +20,9 @@ Mandatory arguments:
 
 Optional arguments:
   - options: a string with any optional flags you want (see supported options below)
-  - colors: a vector of kColors that you want to use instead of the defaults [ex: vector.push_back(kRed)]
+  - signals: a vector of histograms, each representing a signal (enter std::vector <TH1F*>() if you have no signal but want to specify colors)
+  - signal title: the name of each signal, in the same order as the signals vector (enter std::vector <char*>() if you have no signal but want to specify colors)
+  - colors: a vector of kColors that you want to use instead of the defaults [ex: vector.push_back(kRed)], starting with the backgrounds and ending with signals
 
 Supported flags for "options" string:
   - --isLinear: to use linear instead of log on y-axis
