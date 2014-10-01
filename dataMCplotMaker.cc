@@ -395,12 +395,12 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
 
   //Set colors for histograms (this is my color scheme, but based on "approved" one from STOP)
   if (color_input.size() == 0){ 
-    Colors.push_back(kGreen-2);   //note: not part of default
+    Colors.push_back(kGreen+3);   //note: not part of default
+    Colors.push_back(kYellow-4);  //note: stop uses orange-2
+    Colors.push_back(kOrange+10);
+    Colors.push_back(kCyan-4);
+    Colors.push_back(kViolet+4);
     Colors.push_back(kBlue-4);
-    Colors.push_back(kCyan-3);
-    Colors.push_back(kOrange-7);  //note: stop uses -2
-    Colors.push_back(kRed-7);
-    Colors.push_back(kMagenta-5);
   }
   else{
     for (unsigned int i = 0; i < Backgrounds.size(); i++){
@@ -409,14 +409,15 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   }
 
   //Draw histogram with two pads
-  TCanvas c0("c0", "c0"); //, 600, 700);
+  TCanvas c0("c0", "c0");
   TPad* finPad[2];
   if (noData == false){
     c0.SetCanvasSize(600, 700);
     finPad[0] = new TPad("1", "1", 0.0, 0.0, 1.0, 0.885);
     if (!linear) finPad[0]->SetLogy();
-    finPad[0]->SetLeftMargin(0.18);
+    finPad[0]->SetLeftMargin(0.12);
     finPad[1] = new TPad("2", "2", 0.0, 0.8, 1.0, 0.95);
+    finPad[1]->SetLeftMargin(0.12);
     finPad[0]->Draw();
     finPad[1]->Draw();
     finPad[0]->cd();
@@ -460,7 +461,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   if (xAxisOverride[0] == '\0' && showXaxisUnit == 0) stack->GetXaxis()->SetTitle(Form("%s", xAxisLabel));
   if (xAxisOverride[0] == '\0' && showXaxisUnit == 1) stack->GetXaxis()->SetTitle(Form("%s [%s]", xAxisLabel, xAxisUnit));
   if (xAxisOverride[0] != '\0') stack->GetXaxis()->SetTitle(Form("%s", xAxisOverride));
-  if (!noData) stack->GetYaxis()->SetTitleOffset(1.8);
+  if (!noData) stack->GetYaxis()->SetTitleOffset(1.5);
   if (noData) stack->GetYaxis()->SetTitleOffset(1.4);
   stack->Draw("hist");
   THStack *stack2 = new THStack("stack2", "mtInCR1_data"); 
@@ -520,8 +521,8 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     err_hist->SetTitle("");
     err_hist->Draw();
     err_hist->GetYaxis()->SetTitle("Data/MC");
-    err_hist->GetYaxis()->SetTitleSize(0.20);
-    err_hist->GetYaxis()->SetTitleOffset(1.6);
+    err_hist->GetYaxis()->SetTitleSize(0.08);
+    err_hist->GetYaxis()->SetTitleOffset(1.8);
     for (int ib = 1; ib < err_hist->GetNbinsX()+1; ib++){
       float MC_value = 0;
       float MC_error_2 = 0;
@@ -540,9 +541,9 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     err_hist->Draw("PE");
     TText *blah = new TText();
     blah->SetTextFont(42);
-    blah->SetTextSize(0.25);
+    blah->SetTextSize(0.21);
     blah->SetTextAngle(90);
-    blah->DrawTextNDC(0.065,0.06,topYaxisTitle);
+    blah->DrawTextNDC(0.045,0.075,topYaxisTitle);
     TLine line;
     line.SetLineColor(kGray+2);
     line.SetLineWidth(2);
