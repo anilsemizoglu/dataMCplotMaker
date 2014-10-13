@@ -67,6 +67,7 @@ const char* getString(std::string initial, std::string result){
     std::string temp2 = substring.substr(0,substring.length()-1); 
     substring = temp2;
   }
+  if (substring.length() > 4 && substring.substr(substring.length()-4, substring.length()-1) == ".pdf") substring = substring.substr(0, substring.length()-4);
   return substring.c_str();
 }
 
@@ -241,11 +242,13 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   bool doHalf = 0;
   Int_t nDivisions = -1;
   bool noLegend = false;
+  bool png = false;
 
   //Loop over options and change default settings to user-defined settings
   for (unsigned int i = 0; i < Options.size(); i++){
     if (Options[i].find("isLinear") < Options[i].length()) linear = 1; 
     else if (Options[i].find("preserveBackgroundOrder") < Options[i].length()) preserveBackgroundOrder = 1; 
+    else if (Options[i].find("png") < Options[i].length()) png = true;
     else if (Options[i].find("noDivisionLabel") < Options[i].length()) showDivisionLabel = 0; 
     else if (Options[i].find("noLegend") < Options[i].length()) noLegend = 1; 
     else if (Options[i].find("noOverflow") < Options[i].length()) doOverflow = 0; 
@@ -613,5 +616,6 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   //--------------------------------
 
   //Print plot as pdf 
-  c0.Print(Form("%s.pdf", outputName));
+  if (png) c0.Print(Form("%s.png", outputName));
+  else c0.Print(Form("%s.pdf", outputName));
 }

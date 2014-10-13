@@ -3,9 +3,12 @@ dataMCplotMaker
 
 Function to quickly make nice data/MC plots or data plots, with or without signal.  In addition to formatting, it automatically makes an overflow bin for your data, automatically puts the smallest backgrounds on the bottom, and automatically chooses a reasonable maximum and minimum.  
 
+To download this:
+git clone https://github.com/cag51/dataMCplotMaker/
+
 To run:
-  1.  Put both .cc and .h files in the same directory
-  2.  "Include" the .h file (#include "path/dataMCplotMaker") in your file
+  1.  Put both .cc and .h files in the same directory as your macro
+  2.  "Include" the .h file (#include "path/dataMCplotMaker.h") in your file
   3.  In root, compile the .cc file (.L path/dataMCplotMaker.cc+) before loading and compiling your file.
 
 To call the function:
@@ -34,7 +37,7 @@ Supported flags for "options" string:
   - --yAxisLabel X: change the y-axis label from its default of "Entries"
   - --yAxisUnit X: change the y-axis unit from its default of ""
   - --yAxisOverride X: replace the entire y-axis label with the X
-  - --xAxisLabel X: change the x-axis label from its default of "Entries"
+  - --xAxisLabel X: change the x-axis label from its default of "M_T"
   - --noXaxisUnit: do not display a unit for the x-axis
   - --xAxisUnit X: change the x-axis unit from its default of ""
   - --xAxisOverride X: override the entire x-axis label to the user-defined value
@@ -52,6 +55,7 @@ Supported flags for "options" string:
   - --divHalf: reduce the number of x-axis divisions by half
   - --nDivisions X: change the number of x-axis divisions to X, where X = number of primary divisions + 100*number of secondary divisions + 10000*number of tertiary divisions; positive to allow it to optimize (strongly recommended), negative to require it to use your values
   - --noLegend: to suppress the legend
+  - --png: to make output as png rather than pdf (must specify output name)
 
 Example:
   - std::vector < TH1F* > myVector;
