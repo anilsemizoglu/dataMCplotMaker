@@ -232,6 +232,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   char* outputName = new char[strlen("data_MC_plot")+2];
   std::strcpy(outputName, "data_MC_plot");
   bool preserveBackgroundOrder = 0;
+  bool preserveSignalOrder = 0;
   bool showDivisionLabel = 1;
   float setMaximum = -1;
   float setMinimum = -1;
@@ -248,6 +249,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   for (unsigned int i = 0; i < Options.size(); i++){
     if (Options[i].find("isLinear") < Options[i].length()) linear = 1; 
     else if (Options[i].find("preserveBackgroundOrder") < Options[i].length()) preserveBackgroundOrder = 1; 
+    else if (Options[i].find("preserveSignalOrder") < Options[i].length()) preserveSignalOrder = 1; 
     else if (Options[i].find("png") < Options[i].length()) png = true;
     else if (Options[i].find("noDivisionLabel") < Options[i].length()) showDivisionLabel = 0; 
     else if (Options[i].find("noLegend") < Options[i].length()) noLegend = 1; 
@@ -414,6 +416,34 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     for (unsigned int i = 0; i < myPlotInfo.size(); i++){
       Backgrounds.push_back(myPlotInfo[i].Plot);
       Titles.push_back(myPlotInfo[i].Title);
+      if (color_input.size() > 0) Colors.push_back(myPlotInfo[i].Color);
+    }
+  }
+
+  //Sort Signals, with Titles and Colors
+  if (preserveSignalOrder == 0){
+    std::vector<PlotInfo> myPlotInfo;
+ 
+    for (unsigned int i = 0; i < Signals.size(); i++){
+      PlotInfo temp;
+      temp.Plot = Signals[i];
+      temp.Title = SignalTitles[i];
+      if (color_input.size() > 0){
+        temp.Color = color_input[i+Backgrounds.size()];
+      }
+      else{
+        temp.Color = kBlack;
+      }
+      myPlotInfo.push_back(temp);
+    }
+
+    std::sort(myPlotInfo.begin(), myPlotInfo.end(), Integral);
+    Signals.clear();
+    SignalTitles.clear();
+
+    for (unsigned int i = 0; i < myPlotInfo.size(); i++){
+      Signals.push_back(myPlotInfo[i].Plot);
+      SignalTitles.push_back(myPlotInfo[i].Title);
       if (color_input.size() > 0) Colors.push_back(myPlotInfo[i].Color);
     }
   }
