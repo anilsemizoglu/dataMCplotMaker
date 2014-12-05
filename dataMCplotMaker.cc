@@ -203,6 +203,8 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
 
   //Default values of all user-adjustable parameters
   bool linear = 0;
+  bool nostack = 0;
+  bool normalize = 0;
   bool doOverflow = 1;
   bool showXaxisUnit = 1;
   char* energy = new char[strlen("8")+2];
@@ -249,6 +251,8 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   for (unsigned int i = 0; i < Options.size(); i++){
     if (Options[i].find("isLinear") < Options[i].length()) linear = 1; 
     else if (Options[i].find("preserveBackgroundOrder") < Options[i].length()) preserveBackgroundOrder = 1; 
+    else if (Options[i].find("noStack") < Options[i].length()) nostack = 1; 
+    else if (Options[i].find("normalize") < Options[i].length()) normalize = 1; 
     else if (Options[i].find("preserveSignalOrder") < Options[i].length()) preserveSignalOrder = 1; 
     else if (Options[i].find("png") < Options[i].length()) png = true;
     else if (Options[i].find("noDivisionLabel") < Options[i].length()) showDivisionLabel = 0; 
@@ -449,11 +453,18 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   }
 
   //Set colors for histograms (this is my color scheme, probably needs changed for publishable plots)
-  if (color_input.size() == 0 && use_signals == 0){ 
+  if (color_input.size() == 0 && use_signals == 0 && nostack == 0){ 
     Colors.push_back(kGreen+3);   
     Colors.push_back(kYellow-4); 
     Colors.push_back(kOrange+10);
     Colors.push_back(kCyan-4);
+    Colors.push_back(kViolet+4);
+  }
+  if (color_input.size() == 0 && use_signals == 0 && nostack){ 
+    Colors.push_back(kRed); 
+    Colors.push_back(kBlue);
+    Colors.push_back(kGreen+3);   
+    Colors.push_back(kBlack);
     Colors.push_back(kViolet+4);
   }
   else if (color_input.size() == 0 && use_signals == 1){ 
@@ -500,7 +511,9 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   Data->UseCurrentStyle();
   for (unsigned int i = 0; i < Backgrounds.size(); i++){
     Backgrounds[i]->UseCurrentStyle();
-    Backgrounds[i]->SetFillColor(Colors[i]);
+    if (!nostack) Backgrounds[i]->SetFillColor(Colors[i]);
+    if (nostack) Backgrounds[i]->SetLineColor(Colors[i]);
+    if (nostack && normalize) Backgrounds[i]->Scale(1.0/Backgrounds[i]->Integral());
     stack->Add(Backgrounds[i]);
   }
 
@@ -510,7 +523,8 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   else if (setMinimum == -1 && !linear && stack->GetMinimum() > 0) stack->SetMinimum(min(1.0, 0.1*stack->GetMinimum()));
   else if (setMinimum == -1 && !linear) stack->SetMinimum(0.5);
   if (setMinimum == -1 && linear) stack->SetMinimum(0);
-  stack->Draw("hist");
+  if (!nostack) stack->Draw("hist");
+  if (nostack) stack->Draw("nostack");
   float myMax = 0;
   if (setMaximum != -1) myMax = setMaximum;
   else if (setMaximum == -1 && !linear && stack->GetMinimum() > 0) myMax = pow(stack->GetMinimum(), -1.0/3.0) * pow(AdjustedMaximum(Backgrounds, Data, Signals), 4.0/3.0);
@@ -531,9 +545,11 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   if (xAxisOverride[0] != '\0') stack->GetXaxis()->SetTitle(Form("%s", xAxisOverride));
   if (!noData) stack->GetYaxis()->SetTitleOffset(1.5);
   if (noData) stack->GetYaxis()->SetTitleOffset(1.4);
+  if (noData && linear) stack->GetYaxis()->SetTitleOffset(1.6);
 
   //Draw
-  stack->Draw("hist");
+  if (!nostack) stack->Draw("hist");
+  if (nostack) stack->Draw("nostack");
   THStack *stack2 = new THStack("stack2", "stack2"); 
   stack2->Add(Data);
   stack2->Draw("PSAMEE");
@@ -547,7 +563,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
 
   //Legend
   TLegend *leg;
-  if (Backgrounds.size() == 1) leg = new TLegend(0.7+legendRight,0.79+legendUp,0.92+legendRight,0.87+legendUp);
+  if (Backgrounds.size() == 1 || Backgrounds.size() == 2) leg = new TLegend(0.7+legendRight,0.79+legendUp,0.92+legendRight,0.87+legendUp); 
   else leg = new TLegend(0.7+legendRight,0.59+legendUp,0.92+legendRight,0.87+legendUp);
   leg->SetTextSize(legendTextSize);
   if (noData == false) leg->AddEntry(Data, dataName, "lp");

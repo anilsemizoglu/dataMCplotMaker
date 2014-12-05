@@ -16,7 +16,7 @@ To call the function:
 
 Mandatory arguments:
   - data: a histogram of the data.  If you have no data, set this equal to a null histogram [TH1F* null = new TH1F("","",1,0,1) ].  The code is smart enough to give you a good-looking plot.  
-  - backgrounds: a vector of histograms, each representing a background
+  - backgrounds: a vector of histograms, each representing a background.  If you want to compare various quantities, set them both here and use the --noStack option
   - titles: the name of each background, in the same order as the backgrounds vector
   - title: the title of the distribution
   - title2: the subtitle of the distribution
@@ -28,6 +28,8 @@ Optional arguments:
   - colors: a vector of kColors that you want to use instead of the defaults [ex: vector.push_back(kRed)], starting with the backgrounds and ending with signals
 
 Supported flags for "options" string:
+  - --noStack: to prevent backgrounds from being stacked (useful for comparisons)
+  - --normalize: to normalize all backgrounds
   - --isLinear: to use linear instead of log on y-axis
   - --preserveBackgroundOrder: to keep the backgrounds in the order you specified, rather than putting the smallest backgrounds on the bottom
   - --noDivisionLabel: to remove the divisions label on the y-axis (ex: "Entries/30 GeV" becomes "Entries")
