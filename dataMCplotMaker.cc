@@ -204,6 +204,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   //Default values of all user-adjustable parameters
   bool linear = 0;
   bool nostack = 0;
+  bool noFill = 0;
   bool normalize = 0;
   bool doOverflow = 1;
   bool showXaxisUnit = 1;
@@ -252,6 +253,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     if (Options[i].find("isLinear") < Options[i].length()) linear = 1; 
     else if (Options[i].find("preserveBackgroundOrder") < Options[i].length()) preserveBackgroundOrder = 1; 
     else if (Options[i].find("noStack") < Options[i].length()) nostack = 1; 
+    else if (Options[i].find("noFill") < Options[i].length()) nostack = 1;
     else if (Options[i].find("normalize") < Options[i].length()) normalize = 1; 
     else if (Options[i].find("preserveSignalOrder") < Options[i].length()) preserveSignalOrder = 1; 
     else if (Options[i].find("png") < Options[i].length()) png = true;
@@ -509,6 +511,7 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
   THStack *stack = new THStack("stack", ""); 
   Data->SetMarkerStyle(20);
   Data->UseCurrentStyle();
+if(noFill == 0){
   for (unsigned int i = 0; i < Backgrounds.size(); i++){
     Backgrounds[i]->UseCurrentStyle();
     if (!nostack) Backgrounds[i]->SetFillColor(Colors[i]);
@@ -516,6 +519,18 @@ void dataMCplotMaker(TH1F* Data, std::vector <TH1F*> Backgrounds, std::vector <c
     if (nostack && normalize) Backgrounds[i]->Scale(1.0/Backgrounds[i]->Integral());
     stack->Add(Backgrounds[i]);
   }
+} else if(noFill == 1){
+  for (unsigned int i = 0; i < Backgrounds.size(); i++){
+    Backgrounds[i]->UseCurrentStyle();
+    if (!nostack) Backgrounds[i]->SetFillColor(kWhite);
+    if (nostack) Backgrounds[i]->SetFillColor(kWhite);
+    if (!nostack) Backgrounds[i]->SetLineColor(Colors[i]);
+    if (nostack) Backgrounds[i]->SetLineColor(Colors[i]);
+    if (nostack && normalize) Backgrounds[i]->Scale(1.0/Backgrounds[i]->Integral());
+    stack->Add(Backgrounds[i]);
+  }
+
+}
 
   //Minimum and maximum
   if (setMinimum != -1) stack->SetMinimum(setMinimum);
